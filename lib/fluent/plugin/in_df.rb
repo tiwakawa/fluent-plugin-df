@@ -2,9 +2,10 @@ module Fluent
   class DfInput < Fluent::Input
     Fluent::Plugin.register_input('df', self)
 
-    config_param :command,  :string, default: '/bin/df'
-    config_param :tag,      :string, default: 'df'
-    config_param :interval, :integer, default: 3
+    config_param :command,       :string, default: '/bin/df'
+    config_param :interval,      :integer, default: 3
+    config_param :prefix_tag,    :string, default: 'perf.'
+    config_param :ignore_record, :string, default: '^tmpfs'
 
     def configure(conf)
       super
@@ -24,24 +25,23 @@ module Fluent
     private
     def df
       fss = `#{@command}`.split($/)
-      fss.reject! { |x| x =~ /^Filesystem|tmpfs/ }
-
+      fss.shift # remove header
+      fss.reject! { |x| x =~ /#{@ignore_record}/ }
       fss.map do |fs|
         f = fs.split(/\s+/)
-        ret = {}
-        ret[:filesystem] = f.shift
-        ret[:size]       = f.shift
-        ret[:used]       = f.shift
-        ret[:avail]      = f.shift
-        ret[:capacity]   = f.shift.delete('%')
-        ret[:mounted_on] = f.shift
-        ret
+        { 'fs'    => f[0].gsub(/\//, '_'),
+          'size'  => f[1],
+          'used'  => f[2],
+          'avail' => f[3] }
       end
     end
 
     def watch
       while true
-        Fluent::Engine.emit(@tag, Fluent::Engine.now, df)
+        df.each do |result|
+          fs = result.delete('fs')
+          Fluent::Engine.emit("#{@prefix_tag}#{fs}", Fluent::Engine.now, result)
+        end
         sleep @interval
       end
     end
