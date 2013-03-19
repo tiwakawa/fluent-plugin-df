@@ -31,10 +31,12 @@ module Fluent
       fss.reject! { |x| x =~ /#{@ignore_record}/ }
       fss.map do |fs|
         f = fs.split(/\s+/)
-        { 'fs'    => f[0].gsub(/\//, '_'),
-          'size'  => f[1],
-          'used'  => f[2],
-          'avail' => f[3] }
+        { 'fs'       => f[0].gsub(/\//, '_'),
+          'size'     => f[1],
+          'used'     => f[2],
+          'avail'    => f[3],
+          'capacity' => f[4].delete('%').to_f / 100
+        }
       end
     end
 
