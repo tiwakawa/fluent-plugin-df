@@ -2,13 +2,15 @@ module Fluent
   class DfInput < Fluent::Input
     Fluent::Plugin.register_input('df', self)
 
-    config_param :command,       :string, default: '/bin/df'
+    config_param :command,       :string,  default: '/bin/df'
+    config_param :option,        :string,  default: '-k'
     config_param :interval,      :integer, default: 3
-    config_param :prefix_tag,    :string, default: 'perf.'
-    config_param :ignore_record, :string, default: '^tmpfs'
+    config_param :prefix_tag,    :string,  default: 'perf.'
+    config_param :ignore_record, :string,  default: '^tmpfs'
 
     def configure(conf)
       super
+      @command = "#{@command} #{@option}"
     end
 
     def start
