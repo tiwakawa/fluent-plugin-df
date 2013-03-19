@@ -2,15 +2,15 @@ module Fluent
   class DfInput < Fluent::Input
     Fluent::Plugin.register_input('df', self)
 
-    config_param :command,       :string,  default: '/bin/df'
+    config_param :df_path,       :string,  default: '/bin/df'
     config_param :option,        :string,  default: '-k'
     config_param :interval,      :integer, default: 3
-    config_param :prefix_tag,    :string,  default: 'perf.'
-    config_param :ignore_record, :string,  default: '^tmpfs'
+    config_param :tag_prefix,    :string,  default: 'df.'
+    config_param :target_mounts, :string,  default: '/'
 
     def configure(conf)
       super
-      @command = "#{@command} #{@option}"
+      @command = "#{@df_path} #{@option}"
     end
 
     def start
@@ -28,23 +28,30 @@ module Fluent
     def df
       fss = `#{@command}`.split($/)
       fss.shift # remove header
-      fss.reject! { |x| x =~ /#{@ignore_record}/ }
+
       fss.map do |fs|
         f = fs.split(/\s+/)
-        { 'fs'       => f[0].gsub(/\//, '_'),
-          'size'     => f[1],
-          'used'     => f[2],
-          'avail'    => f[3],
-          'capacity' => f[4].delete('%').to_f / 100
-        }
-      end
+        if arrayed_target_mounts.include?(f[5])
+          {
+            'fs'       => f[0].gsub(/\//, '_'),
+            'size'     => f[1],
+            'used'     => f[2],
+            'avail'    => f[3],
+            'capacity' => (f[4].delete('%').to_f / 100).to_s
+          }
+        end
+      end.compact
+    end
+
+    def arrayed_target_mounts
+      @target_mounts.gsub(/'/, '').split(',').map(&:strip)
     end
 
     def watch
       while true
         df.each do |result|
           fs = result.delete('fs')
-          Fluent::Engine.emit("#{@prefix_tag}#{fs}", Fluent::Engine.now, result)
+          Fluent::Engine.emit("#{@tag_prefix}#{fs}", Fluent::Engine.now, result)
         end
         sleep @interval
       end
