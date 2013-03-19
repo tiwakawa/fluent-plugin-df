@@ -9,7 +9,7 @@ class DfInputTest < Test::Unit::TestCase
     df_path       /bin/df
     option        -k
     interval      3
-    tag_prefix    df.
+    tag_prefix    df
     target_mounts /
   ]
 
@@ -21,7 +21,7 @@ class DfInputTest < Test::Unit::TestCase
     d = create_driver
     assert_equal "/bin/df", d.instance.df_path
     assert_equal "-k",      d.instance.option
-    assert_equal "df.",     d.instance.tag_prefix
+    assert_equal "df",      d.instance.tag_prefix
     assert_equal 3,         d.instance.interval
     assert_equal "/",       d.instance.target_mounts
   end

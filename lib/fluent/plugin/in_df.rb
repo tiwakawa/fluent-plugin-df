@@ -5,7 +5,7 @@ module Fluent
     config_param :df_path,       :string,  default: '/bin/df'
     config_param :option,        :string,  default: '-k'
     config_param :interval,      :integer, default: 3
-    config_param :tag_prefix,    :string,  default: 'df.'
+    config_param :tag_prefix,    :string,  default: 'df'
     config_param :target_mounts, :string,  default: '/'
 
     def configure(conf)
@@ -26,7 +26,13 @@ module Fluent
 
     private
     def df
-      fss = `#{@command}`.split($/)
+      begin
+        fss = `#{@command}`.split($/)
+      rescue => e
+        $log.error "#{e.class.name} - #{e.message}"
+        exit
+      end
+
       fss.shift # remove header
 
       fss.map do |fs|
@@ -51,7 +57,7 @@ module Fluent
       while true
         df.each do |result|
           fs = result.delete('fs')
-          Fluent::Engine.emit("#{@tag_prefix}#{fs}", Fluent::Engine.now, result)
+          Fluent::Engine.emit("#{@tag_prefix}.#{fs}", Fluent::Engine.now, result)
         end
         sleep @interval
       end

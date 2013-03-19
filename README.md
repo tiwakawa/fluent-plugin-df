@@ -23,7 +23,7 @@ Or install it yourself as:
       df_path /bin/df
       option -k
       interval 3
-      tag_prefix df.
+      tag_prefix df
       target_mounts /
     </source>
 
