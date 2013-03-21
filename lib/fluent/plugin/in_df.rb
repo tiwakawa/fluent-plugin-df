@@ -43,7 +43,7 @@ module Fluent
             'size'     => f[1],
             'used'     => f[2],
             'avail'    => f[3],
-            'capacity' => (f[4].delete('%').to_f / 100).to_s
+            'capacity' => f[4].delete('%')
           }
         end
       end.compact

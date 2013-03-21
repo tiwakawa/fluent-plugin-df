@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ## Output Format
 
-    df._dev_disk0s2: {"size":"487546976","used":"52533512","avail":"434757464","capacity":"0.11"}
+    df._dev_disk0s2: {"size":"487546976","used":"52533512","avail":"434757464","capacity":"11"}
 
   Tag name is the concatenation of the name of the `tag_prefix` and file system.
   `/` in the file system is replaced by an `_`
