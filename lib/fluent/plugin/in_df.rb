@@ -2,7 +2,6 @@ module Fluent
   class DfInput < Fluent::Input
     Fluent::Plugin.register_input('df', self)
 
-    config_param :df_path,       :string,  default: '/bin/df'
     config_param :option,        :string,  default: '-k'
     config_param :interval,      :integer, default: 3
     config_param :tag_prefix,    :string,  default: 'df'
@@ -10,7 +9,7 @@ module Fluent
 
     def configure(conf)
       super
-      @command = "#{@df_path} #{@option}"
+      @command = "df #{@option}"
     end
 
     def start

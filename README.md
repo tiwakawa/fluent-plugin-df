@@ -20,7 +20,6 @@ Or install it yourself as:
 
     <source>
       type df
-      df_path /bin/df
       option -k
       interval 3
       tag_prefix df

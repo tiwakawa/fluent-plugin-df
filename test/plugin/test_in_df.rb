@@ -6,7 +6,6 @@ class DfInputTest < Test::Unit::TestCase
   end
 
   CONFIG = %[
-    df_path       /bin/df
     option        -k
     interval      3
     tag_prefix    df
@@ -19,7 +18,6 @@ class DfInputTest < Test::Unit::TestCase
 
   def test_configure
     d = create_driver
-    assert_equal "/bin/df", d.instance.df_path
     assert_equal "-k",      d.instance.option
     assert_equal "df",      d.instance.tag_prefix
     assert_equal 3,         d.instance.interval
