@@ -14,13 +14,24 @@ module Fluent
 
     def start
       super
-      @watcher = Thread.new(&method(:watch))
+      @loop = Coolio::Loop.new
+      @timer = DfInputTimerWatcher.new(@interval, true, &method(:watch))
+      @loop.attach(@timer)
+      @thread = Thread.new(&method(:run))
     end
 
     def shutdown
       super
-      @watcher.terminate
-      @watcher.join
+      @loop.watchers.each { |x| x.detach }
+      @loop.stop
+      @thread.terminate
+      @thread.join
+    end
+
+    def run
+      @loop.run
+    rescue => e
+      $log.error "#{e.class.name} - #{e.message}"
     end
 
     private
@@ -53,13 +64,23 @@ module Fluent
     end
 
     def watch
-      while true
-        df.each do |result|
-          fs = result.delete('fs')
-          Fluent::Engine.emit("#{@tag_prefix}.#{fs}", Fluent::Engine.now, result)
-        end
-        sleep @interval
+      df.each do |result|
+        fs = result.delete('fs')
+        Fluent::Engine.emit("#{@tag_prefix}.#{fs}", Fluent::Engine.now, result)
       end
+    end
+  end
+
+  class DfInputTimerWatcher < Coolio::TimerWatcher
+    def initialize(interval, repeat, &callback)
+      @callback = callback
+      super(interval, repeat)
+    end
+
+    def on_timer
+      @callback.call
+    rescue => e
+      $log.error "#{e.class.name} - #{e.message}"
     end
   end
 end
