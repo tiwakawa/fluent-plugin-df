@@ -56,10 +56,14 @@ module Fluent
       @target_mounts.gsub(/'/, '').split(',').map(&:strip)
     end
 
+    def tag_name(fs)
+      @tag_prefix.empty? ? fs : "#{@tag_prefix}.#{fs}"
+    end
+
     def watch
       df.each do |result|
         fs = result.delete('fs')
-        Fluent::Engine.emit("#{@tag_prefix}.#{fs}", Fluent::Engine.now, result)
+        Fluent::Engine.emit(tag_name(fs), Fluent::Engine.now, result)
       end
     end
   end
