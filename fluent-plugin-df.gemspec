@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-df"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.2"
   spec.authors       = ["tiwakawa"]
   spec.email         = ["tiwakawa@aiming-inc.com"]
   spec.description   = %q{input plugin to get disk free data}
