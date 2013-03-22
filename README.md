@@ -1,6 +1,6 @@
 # Fluent::Plugin::Df
 
-TODO: Write a gem description
+Df input plugin for Fluent event collector
 
 ## Installation
 
