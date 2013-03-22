@@ -24,7 +24,6 @@ class DfInputTest < Test::Unit::TestCase
     assert_equal "/",       d.instance.target_mounts
   end
 
-  def test_emit
-    # TODO
-  end
+#  def test_emit
+#  end
 end
