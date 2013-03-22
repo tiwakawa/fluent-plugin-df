@@ -22,7 +22,7 @@ module Fluent
 
     def shutdown
       super
-      @loop.watchers.each { |x| x.detach }
+      @loop.watchers.each { |w| w.detach }
       @loop.stop
       @thread.terminate
       @thread.join
@@ -36,15 +36,8 @@ module Fluent
 
     private
     def df
-      begin
-        fss = `#{@command}`.split($/)
-      rescue => e
-        $log.error "#{e.class.name} - #{e.message}"
-        exit
-      end
-
+      fss = `#{@command} 2> /dev/null`.split($/)
       fss.shift # remove header
-
       fss.map do |fs|
         f = fs.split(/\s+/)
         if arrayed_target_mounts.include?(f[5])
