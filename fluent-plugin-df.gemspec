@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-df"
-  spec.version       = "0.0.2"
+  spec.version       = "0.0.3"
   spec.authors       = ["tiwakawa"]
   spec.email         = ["tiwakawa@aiming-inc.com"]
-  spec.description   = %q{input plugin to get disk free data}
-  spec.summary       = %q{input plugin to get disk free data}
-  spec.homepage      = ""
+  spec.description   = %q{Df input plugin for Fluent event collector}
+  spec.summary       = %q{Df input plugin for Fluent event collector}
+  spec.homepage      = "https://github.com/tiwakawa/fluent-plugin-df"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
