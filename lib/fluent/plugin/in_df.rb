@@ -9,7 +9,7 @@ module Fluent
 
     def configure(conf)
       super
-      @command = "df #{@option}"
+      @command = "df #{@option} #{@target_mounts} 2> /dev/null"
     end
 
     def start
@@ -36,24 +36,18 @@ module Fluent
 
     private
     def df
-      fss = `#{@command} 2> /dev/null`.split($/)
+      fss = `#{@command}`.split($/)
       fss.shift # remove header
       fss.map do |fs|
         f = fs.split(/\s+/)
-        if arrayed_target_mounts.include?(f[5])
-          {
-            'fs'       => f[0].gsub(/\//, '_'),
-            'size'     => f[1],
-            'used'     => f[2],
-            'avail'    => f[3],
-            'capacity' => f[4].delete('%')
-          }
-        end
-      end.compact
-    end
-
-    def arrayed_target_mounts
-      @target_mounts.gsub(/'/, '').split(',').map(&:strip)
+        {
+          'fs'        => f[0].gsub(/\//, '_'),
+          'size'      => f[1],
+          'used'      => f[2],
+          'available' => f[3],
+          'capacity'  => f[4].delete('%')
+        }
+      end
     end
 
     def tag_name(fs)
