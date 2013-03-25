@@ -7,6 +7,7 @@ module Fluent
     config_param :tag_prefix,    :string,  default: 'df'
     config_param :target_mounts, :string,  default: '/'
     config_param :replace_slash, :bool,    default: true
+    config_param :tag,           :string,  default: nil
 
     def configure(conf)
       super
@@ -56,7 +57,7 @@ module Fluent
     end
 
     def tag_name(fs)
-      @tag_prefix.empty? ? fs : "#{@tag_prefix}.#{fs}"
+      @tag || (@tag_prefix.empty? ? fs : "#{@tag_prefix}.#{fs}")
     end
 
     def watch

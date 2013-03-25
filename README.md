@@ -25,6 +25,7 @@ Or install it yourself as:
       tag_prefix df          # prefix of tag
       target_mounts /        # "Mounted on" to filter the information you want to retrieve
       replace_slash true     # whether to replace '_' by '/' in the file system
+      # tag free_disk        # tag (default is nil)
     </source>
 
   If you specify more than one `target_mounts`, separated by spaces.
@@ -33,7 +34,9 @@ Or install it yourself as:
 
     2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11"}
 
-  Tag name is the concatenation of the name of the `tag_prefix` and file system.
+  If `tag` specified, character of `tag` is the Tag name.
+
+  Otherwise, Tag name is the concatenation of the name of the `tag_prefix` and file system.
 
   `/` in the file system is replaced by an `_`, if `replace_slash` is true.
 
