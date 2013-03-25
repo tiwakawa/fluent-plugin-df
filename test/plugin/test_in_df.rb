@@ -10,6 +10,7 @@ class DfInputTest < Test::Unit::TestCase
     interval      3
     tag_prefix    df
     target_mounts /
+    replace_slash true
   ]
 
   def create_driver(conf=CONFIG)
@@ -18,10 +19,11 @@ class DfInputTest < Test::Unit::TestCase
 
   def test_configure
     d = create_driver
-    assert_equal "-k",      d.instance.option
-    assert_equal "df",      d.instance.tag_prefix
-    assert_equal 3,         d.instance.interval
-    assert_equal "/",       d.instance.target_mounts
+    assert_equal "-k", d.instance.option
+    assert_equal "df", d.instance.tag_prefix
+    assert_equal 3,    d.instance.interval
+    assert_equal "/",  d.instance.target_mounts
+    assert_equal true, d.instance.replace_slash
   end
 
 #  def test_emit

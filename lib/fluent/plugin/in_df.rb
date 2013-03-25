@@ -6,6 +6,7 @@ module Fluent
     config_param :interval,      :integer, default: 3
     config_param :tag_prefix,    :string,  default: 'df'
     config_param :target_mounts, :string,  default: '/'
+    config_param :replace_slash, :bool,    default: true
 
     def configure(conf)
       super
@@ -41,13 +42,17 @@ module Fluent
       fss.map do |fs|
         f = fs.split(/\s+/)
         {
-          'fs'        => f[0].gsub(/\//, '_'),
+          'fs'        => replace_slash_in(f[0]),
           'size'      => f[1],
           'used'      => f[2],
           'available' => f[3],
           'capacity'  => f[4].delete('%')
         }
       end
+    end
+
+    def replace_slash_in(fs)
+      @replace_slash ? fs.gsub(/\//, '_') : fs
     end
 
     def tag_name(fs)

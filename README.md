@@ -20,20 +20,22 @@ Or install it yourself as:
 
     <source>
       type df
-      option -k
-      interval 3
-      tag_prefix df
-      target_mounts /
+      option -k              # df command options
+      interval 3             # execution interval of the df command
+      tag_prefix df          # prefix of tag
+      target_mounts /        # "Mounted on" to filter the information you want to retrieve
+      replace_slash true     # whether to replace '_' by '/' in the file system
     </source>
 
   If you specify more than one `target_mounts`, separated by spaces.
 
 ## Output Format
 
-    df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11"}
+    2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11"}
 
   Tag name is the concatenation of the name of the `tag_prefix` and file system.
-  `/` in the file system is replaced by an `_`
+
+  `/` in the file system is replaced by an `_`, if `replace_slash` is true.
 
 ## Contributing
 
