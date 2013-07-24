@@ -14,7 +14,7 @@ module Fluent
 
     def configure(conf)
       super
-      @command = "df #{@option} #{@target_mounts} 2> /dev/null"
+      @command = "df -P #{@option} #{@target_mounts} 2> /dev/null"
     end
 
     def start
