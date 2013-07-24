@@ -12,6 +12,7 @@ class DfInputTest < Test::Unit::TestCase
     target_mounts /
     replace_slash true
     tag           free_disk
+    rm_percent    true
   ]
 
   def create_driver(conf=CONFIG)
@@ -26,6 +27,7 @@ class DfInputTest < Test::Unit::TestCase
     assert_equal "/",         d.instance.target_mounts
     assert_equal true,        d.instance.replace_slash
     assert_equal "free_disk", d.instance.tag
+    assert_equal true,        d.instance.rm_percent
   end
 
 #  def test_emit

@@ -8,6 +8,7 @@ module Fluent
     config_param :target_mounts, :string,  default: '/'
     config_param :replace_slash, :bool,    default: true
     config_param :tag,           :string,  default: nil
+    config_param :rm_percent,    :bool,    default: true
 
     def configure(conf)
       super
@@ -47,7 +48,7 @@ module Fluent
           'size'      => f[1],
           'used'      => f[2],
           'available' => f[3],
-          'capacity'  => f[4].delete('%')
+          'capacity'  => @rm_percent ? f[4].delete('%') : f[4]
         }
       end
     end
