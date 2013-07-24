@@ -2,6 +2,8 @@ module Fluent
   class DfInput < Fluent::Input
     Fluent::Plugin.register_input('df', self)
 
+    EXPECTED_DF_OUTPUT_COLS_LENGTH = 6 # filesystem, blocks, used, available, capacity, mounted on
+
     config_param :option,        :string,  default: '-k'
     config_param :interval,      :integer, default: 3
     config_param :tag_prefix,    :string,  default: 'df'
@@ -43,12 +45,17 @@ module Fluent
       fss.shift # remove header
       fss.map do |fs|
         f = fs.split(/\s+/)
+
+        unless f.length == EXPECTED_DF_OUTPUT_COLS_LENGTH
+          $log.warn "The output of the df command is unexpected. May not obtain the correct result."
+        end
+
         {
           'fs'        => replace_slash_in(f[0]),
           'size'      => f[1],
           'used'      => f[2],
           'available' => f[3],
-          'capacity'  => @rm_percent ? f[4].delete('%') : f[4]
+          'capacity'  => f[4] && @rm_percent ? f[4].delete('%') : f[4]
         }
       end
     end
