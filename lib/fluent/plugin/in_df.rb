@@ -11,6 +11,7 @@ module Fluent
     config_param :replace_slash, :bool,    default: true
     config_param :tag,           :string,  default: nil
     config_param :rm_percent,    :bool,    default: true
+    config_param :hostname,      :bool,    default: false
 
     def configure(conf)
       super
@@ -50,13 +51,15 @@ module Fluent
           $log.warn "The output of the df command is unexpected. May not obtain the correct result."
         end
 
-        {
+        df_info = {
           'fs'        => replace_slash_in(f[0]),
           'size'      => f[1],
           'used'      => f[2],
           'available' => f[3],
           'capacity'  => f[4] && @rm_percent ? f[4].delete('%') : f[4]
         }
+        df_info['hostname'] = `hostname`.chomp if @hostname
+        df_info
       end
     end
 

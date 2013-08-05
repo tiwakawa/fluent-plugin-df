@@ -26,13 +26,15 @@ Or install it yourself as:
       target_mounts /        # "Mounted on" to filter the information you want to retrieve
       replace_slash true     # whether to replace '_' by '/' in the file system
       # tag free_disk        # tag (default is nil)
+      rm_percent true        # delete the percentage mark of capacity
+      hostname true          # add to the record the results of the hostname command
     </source>
 
   If you specify more than one `target_mounts`, separated by spaces.
 
 ## Output Format
 
-    2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11"}
+    2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11","hostname":"my.local"}
 
   If `tag` specified, character of `tag` is the Tag name.
 
