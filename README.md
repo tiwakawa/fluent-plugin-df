@@ -1,4 +1,4 @@
-# Fluent::Plugin::Df
+# Fluent::Plugin::Df, a plugin for [Fluentd](http://fluentd.org)
 
 Df input plugin for Fluent event collector
 
