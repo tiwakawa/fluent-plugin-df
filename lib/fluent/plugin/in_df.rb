@@ -53,10 +53,10 @@ module Fluent
 
         df_info = {
           'fs'        => replace_slash_in(f[0]),
-          'size'      => f[1],
-          'used'      => f[2],
-          'available' => f[3],
-          'capacity'  => f[4] && @rm_percent ? f[4].delete('%') : f[4]
+          'size'      => f[1].to_i,
+          'used'      => f[2].to_i,
+          'available' => f[3].to_i,
+          'capacity'  => f[4] && @rm_percent ? f[4].delete('%').to_i : f[4]
         }
         df_info['hostname'] = `hostname`.chomp if @hostname
         df_info
