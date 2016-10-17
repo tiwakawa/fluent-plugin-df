@@ -34,7 +34,7 @@ Or install it yourself as:
 
 ## Output Format
 
-    2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11","hostname":"my.local"}
+    2013-03-01 00:00:00 +0900 df._dev_disk0s2: {"size":"487546976","used":"52533512","available":"434757464","capacity":"11","hostname":"my.local", "mounted_on":"/"}
 
   If `tag` specified, character of `tag` is the Tag name.
 
