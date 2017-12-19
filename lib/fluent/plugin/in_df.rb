@@ -74,7 +74,7 @@ module Fluent
     def watch
       df.each do |result|
         fs = result.delete('fs')
-        Fluent::Engine.emit(tag_name(fs), Fluent::Engine.now, result)
+        router.emit(tag_name(fs), Fluent::Engine.now, result)
       end
     end
   end
