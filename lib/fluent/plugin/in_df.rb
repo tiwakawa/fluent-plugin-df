@@ -27,6 +27,10 @@ module Fluent::Plugin
       timer_execute(:in_df, @interval, &method(:on_timer))
     end
 
+    def multi_workers_ready?
+      true
+    end
+
     private
 
     def df
