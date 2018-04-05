@@ -19,7 +19,7 @@ Or install it yourself as:
 ## Usage
 
     <source>
-      type df
+      @type df
       option -k              # df command options
       interval 3             # execution interval of the df command
       tag_prefix df          # prefix of tag
