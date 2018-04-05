@@ -2,6 +2,13 @@
 
 Df input plugin for Fluent event collector
 
+## Requirements
+
+| fluent-plugin-df  | fluentd    | ruby |
+|-------------------|------------|------|
+| >= 1.0.0          | >= v1.0.0  | >= 2.1 |
+|  < 1.0.0          | >= v0.12.0 | >= 1.9 |
+
 ## Installation
 
 Add this line to your application's Gemfile:
