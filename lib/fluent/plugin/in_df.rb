@@ -48,7 +48,7 @@ module Fluent
         f = fs.split(/\s+/)
 
         unless f.length == EXPECTED_DF_OUTPUT_COLS_LENGTH
-          $log.warn "The output of the df command is unexpected. May not obtain the correct result."
+          log.warn "The output of the df command is unexpected. May not obtain the correct result."
         end
 
         df_info = {
