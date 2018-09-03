@@ -1,6 +1,10 @@
-module Fluent
-  class DfInput < Fluent::Input
+require "fluent/plugin/input"
+
+module Fluent::Plugin
+  class DfInput < Fluent::Plugin::Input
     Fluent::Plugin.register_input('df', self)
+
+    helpers :timer
 
     EXPECTED_DF_OUTPUT_COLS_LENGTH = 6 # filesystem, blocks, used, available, capacity, mounted on
 
@@ -20,27 +24,15 @@ module Fluent
 
     def start
       super
-      @loop = Coolio::Loop.new
-      @timer = DfInputTimerWatcher.new(@interval, true, &method(:watch))
-      @loop.attach(@timer)
-      @thread = Thread.new(&method(:run))
+      timer_execute(:in_df, @interval, &method(:on_timer))
     end
 
-    def shutdown
-      super
-      @loop.watchers.each { |w| w.detach }
-      @loop.stop
-      @thread.terminate
-      @thread.join
-    end
-
-    def run
-      @loop.run
-    rescue => e
-      $log.error "#{e.class.name} - #{e.message}"
+    def multi_workers_ready?
+      true
     end
 
     private
+
     def df
       fss = `#{@command}`.split($/)
       fss.shift # remove header
@@ -48,7 +40,7 @@ module Fluent
         f = fs.split(/\s+/)
 
         unless f.length == EXPECTED_DF_OUTPUT_COLS_LENGTH
-          $log.warn "The output of the df command is unexpected. May not obtain the correct result."
+          log.warn "The output of the df command is unexpected. May not obtain the correct result."
         end
 
         df_info = {
@@ -71,24 +63,11 @@ module Fluent
       @tag || (@tag_prefix.empty? ? fs : "#{@tag_prefix}.#{fs}")
     end
 
-    def watch
+    def on_timer
       df.each do |result|
         fs = result.delete('fs')
         router.emit(tag_name(fs), Fluent::Engine.now, result)
       end
-    end
-  end
-
-  class DfInputTimerWatcher < Coolio::TimerWatcher
-    def initialize(interval, repeat, &callback)
-      @callback = callback
-      super(interval, repeat)
-    end
-
-    def on_timer
-      @callback.call
-    rescue => e
-      $log.error "#{e.class.name} - #{e.message}"
     end
   end
 end

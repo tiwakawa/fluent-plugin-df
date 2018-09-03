@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-df"
-  spec.version       = "0.0.6"
+  spec.version       = "1.0.0"
   spec.authors       = ["tiwakawa"]
   spec.email         = ["tiwakawa@aiming-inc.com"]
   spec.description   = %q{Df input plugin for Fluent event collector}
@@ -19,5 +19,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
-  spec.add_runtime_dependency "fluentd"
+  spec.add_development_dependency "test-unit", "> 3"
+  spec.add_runtime_dependency "fluentd", ">= 1.0.0", "< 2"
 end

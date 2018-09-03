@@ -2,6 +2,13 @@
 
 Df input plugin for Fluent event collector
 
+## Requirements
+
+| fluent-plugin-df  | fluentd    | ruby |
+|-------------------|------------|------|
+| >= 1.0.0          | >= v1.0.0  | >= 2.1 |
+|  < 1.0.0          | >= v0.12.0 | >= 1.9 |
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -19,7 +26,7 @@ Or install it yourself as:
 ## Usage
 
     <source>
-      type df
+      @type df
       option -k              # df command options
       interval 3             # execution interval of the df command
       tag_prefix df          # prefix of tag
