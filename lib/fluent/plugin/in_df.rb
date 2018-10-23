@@ -48,7 +48,8 @@ module Fluent::Plugin
           'size'      => f[1],
           'used'      => f[2],
           'available' => f[3],
-          'capacity'  => f[4] && @rm_percent ? f[4].delete('%') : f[4]
+          'capacity'  => f[4] && @rm_percent ? f[4].delete('%') : f[4],
+          'mounted_on' => f[5]
         }
         df_info['hostname'] = `hostname`.chomp if @hostname
         df_info
